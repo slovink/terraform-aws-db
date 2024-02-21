@@ -3,7 +3,6 @@ output "db_instance_arn" {
   description = "The ARN of the RDS instance"
 }
 
-
 output "db_instance_availability_zone" {
   value       = module.mariadb.db_instance_availability_zone
   description = "The availability zone of the RDS instance"

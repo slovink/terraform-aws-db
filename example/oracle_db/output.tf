@@ -1,4 +1,3 @@
-
 output "db_instance_address" {
   value       = module.oracle.db_instance_address
   description = "The address of the RDS instance"

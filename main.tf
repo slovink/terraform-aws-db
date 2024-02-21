@@ -7,6 +7,7 @@ module "labels" {
   repository  = var.repository
 }
 
+
 resource "random_id" "password" {
   count       = var.enabled ? 1 : 0
   byte_length = 20

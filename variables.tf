@@ -622,7 +622,6 @@ variable "alias" {
   default     = "alias/rds11"
   description = "The display name of the alias. The name must start with the word `alias` followed by a forward slash."
 }
-
 variable "ssm_parameter_description" {
   type        = string
   default     = "Description of the parameter."

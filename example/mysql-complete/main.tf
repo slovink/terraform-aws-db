@@ -2,6 +2,7 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+
 module "vpc" {
   source      = "git@github.com:slovink/terraform-aws-vpc.git?ref=vinod"
   name        = "vpc"
