@@ -1,0 +1,242 @@
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name : Terraform DATA-BASE
+
+# License of this project
+license: "APACHE"
+
+# Canonical GitHub repo
+github_repo: git@github.com:slovink/terraform-aws-db.git
+
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v1.7.0-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-APACHE-blue.svg"
+    url: "https://github.com/slovink/terraform-aws-db/blob/main/LICENSE"
+  - name: "tfsec"
+    image: "https://github.com/slovink/terraform-aws-db/blob/master/.github/workflows/tfsec.yml"
+    url: "https://github.com/slovink/terraform-aws-db/blob/master/.github/workflows/tfsec.yml"
+
+
+
+#  description of this project
+description: |-
+  This terraform module is designed to generate consistent label names and tags for resources. You can use terraform-db to implement a strict naming convention.
+
+
+# extra content
+include:
+  - "terraform.md"
+# How to use this project
+usage : |-
+
+
+ ## Examples
+
+ ### Example: MariaDB
+ ```hcl
+   module "mariadb" {
+      source                          = "https://github.com/slovink/terraform-aws-db.git?ref=v1.0.0"
+      name                            = "mariadb"
+      environment                     = "test"
+      label_order                     = ["environment", "name"]
+      engine                          = "MariaDB"
+      engine_version                  = "10.6.10"
+      instance_class                  = "db.m5.large"
+      engine_name                     = "MariaDB"
+      allocated_storage               = 50
+      db_name                         = "test"
+      username                        = "user"
+      password                        = "esfsgcGdfawAhdxtfjm!"
+      port                            = "3306"
+      maintenance_window              = "Mon:00:00-Mon:03:00"
+      backup_window                   = "03:00-06:00"
+      multi_az                        = false
+      vpc_id                          = module.vpc.id
+      allowed_ip                      = [module.vpc.vpc_cidr_block]
+      allowed_ports                   = [3306]
+      family                          = "mariadb10.6"
+      backup_retention_period         = 0
+      enabled_cloudwatch_logs_exports = ["audit", "general"]
+      subnet_ids                      = module.private_subnets.public_subnet_id
+      publicly_accessible             = true
+      major_engine_version            = "10.6"
+      deletion_protection             = false
+      ssm_parameter_endpoint_enabled  = true
+   }
+ ```
+
+ ## Example: mysql-complete
+  ```hcl
+    module "mysql" {
+      source                          = "https://github.com/slovink/terraform-aws-db.git?ref=v1.0.0"
+      name                            = "mysql"
+      environment                     = "test"
+      label_order                     = ["environment", "name"]
+      engine                          = "mysql"
+      engine_version                  = "8.0.28"
+      instance_class                  = "db.m6i.xlarge."
+      allocated_storage               = 5
+      vpc_id                          = module.vpc.id
+      allowed_ip                      = [module.vpc.vpc_cidr_block]
+      allowed_ports                   = [3306]
+      db_name                         = "test"
+      username                        = "user"
+      password                        = "esfsgcGdfawAhdxtfjm!"
+      port                            = "3306"
+      maintenance_window              = "Mon:00:00-Mon:03:00"
+      backup_window                   = "03:00-06:00"
+      multi_az                        = false
+      backup_retention_period         = 7
+      enabled_cloudwatch_logs_exports = ["audit", "general"]
+      subnet_ids                      = module.subnets.public_subnet_id
+      publicly_accessible             = true
+      family                          = "mysql8.0"
+      major_engine_version            = "8.0"
+      deletion_protection             = false
+
+      parameters = [
+      {
+      name  = "character_set_client"
+      value = "utf8"
+      },
+      {
+      name  = "character_set_server"
+      value = "utf8"
+      }
+      ]
+
+      options = [
+      {
+      option_name = "MARIADB_AUDIT_PLUGIN"
+
+      option_settings = [
+      {
+      name  = "SERVER_AUDIT_EVENTS"
+      value = "CONNECT"
+      },
+      {
+      name  = "SERVER_AUDIT_FILE_ROTATIONS"
+      value = "37"
+      },
+      ]
+      },
+      ]
+      ssm_parameter_endpoint_enabled = true
+    }
+  ```
+ ## Example: oracle_db
+  ```hcl
+    module "oracle" {
+      source                              = "https://github.com/slovink/terraform-aws-db.git?ref=v1.0.0"
+      name                                = "oracle"
+      environment                         = "test"
+      label_order                         = ["environment", "name"]
+      engine                              = "oracle-ee"
+      engine_version                      = "19"
+      instance_class                      = "db.t3.medium"
+      engine_name                         = "oracle-ee"
+      allocated_storage                   = 50
+      storage_encrypted                   = true
+      family                              = "oracle-ee-19"
+      db_name                             = "test"
+      username                            = "admin"
+      password                            = "esfsgcGdfawAhdxtfjm!"
+      port                                = "1521"
+      maintenance_window                  = "Mon:00:00-Mon:03:00"
+      backup_window                       = "03:00-06:00"
+      multi_az                            = false
+      vpc_id                              = module.vpc.id
+      allowed_ip                          = [module.vpc.vpc_cidr_block]
+      allowed_ports                       = [1521]
+      backup_retention_period             = 0
+      enabled_cloudwatch_logs_exports     = ["audit"]
+      subnet_ids                          = module.private_subnets.public_subnet_id
+      publicly_accessible                 = true
+      major_engine_version                = "19"
+      deletion_protection                 = false
+      iam_database_authentication_enabled = false
+      ssm_parameter_endpoint_enabled      = true
+    }
+  ```
+ ## Example: postgreSQL
+  ```hcl
+    module "postgresql" {
+      source                          = "https://github.com/slovink/terraform-aws-db.git?ref=v1.0.0"
+      name                            = "postgresql"
+      environment                     = "test"
+      label_order                     = ["environment", "name"]
+      engine                          = "postgres"
+      engine_version                  = "14.6"
+      instance_class                  = "db.t3.medium"
+      allocated_storage               = 50
+      engine_name                     = "postgres"
+      storage_encrypted               = true
+      family                          = "postgres14"
+      db_name                         = "test"
+      username                        = "dbname"
+      password                        = "esfsgcGdfawAhdxtfjm!"
+      port                            = "5432"
+      maintenance_window              = "Mon:00:00-Mon:03:00"
+      backup_window                   = "03:00-06:00"
+      multi_az                        = false
+      vpc_id                          = module.vpc.id
+      allowed_ip                      = [module.vpc.vpc_cidr_block]
+      allowed_ports                   = [5432]
+      backup_retention_period         = 0
+      enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
+      subnet_ids                      = module.private_subnets.public_subnet_id
+      publicly_accessible             = true
+      major_engine_version            = "14"
+      deletion_protection             = false
+      ssm_parameter_endpoint_enabled  = true
+    }
+  ```
+ ## Example: replica-mysql
+  ```hcl
+    module "mysql" {
+      source                          = "https://github.com/slovink/terraform-aws-db.git?ref=v1.0.0"
+      name                            = "rds"
+      environment                     = "test"
+      label_order                     = ["environment", "name"]
+      enabled                         = true
+      engine                          = "mysql"
+      engine_version                  = "8.0"
+      instance_class                  = "db.t4g.large"
+      replica_instance_class          = "db.t4g.large"
+      allocated_storage               = 20
+      identifier                      = ""
+      snapshot_identifier             = ""
+      kms_key_id                      = ""
+      enabled_read_replica            = true
+      enabled_replica                 = true
+      db_name                         = "replica"
+      username                        = "replica_mysql"
+      password                        = "clkjvnsdikjhdsijfsdli"
+      port                            = 3306
+      maintenance_window              = "Mon:00:00-Mon:03:00"
+      backup_window                   = "03:00-06:00"
+      multi_az                        = true
+      vpc_id                          = module.vpc.id
+      allowed_ip                      = [module.vpc.vpc_cidr_block]
+      allowed_ports                   = [3306]
+      backup_retention_period         = 1
+      enabled_cloudwatch_logs_exports = ["general"]
+      subnet_ids                      = module.subnets.public_subnet_id
+      publicly_accessible             = false
+      family                          = "mysql8.0"
+      major_engine_version            = "8.0"
+      auto_minor_version_upgrade      = false
+      deletion_protection             = false
+      ssm_parameter_endpoint_enabled  = true
+    }
+  ```
+
